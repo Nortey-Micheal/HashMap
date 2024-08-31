@@ -1,0 +1,21 @@
+const Set = (key,value) => {
+        let hashCode = Hash(key);
+
+        // Bucket[hashCode].key = key;
+        // Bucket[hashCode].value = value;
+
+        if (!Bucket[hashCode]) {
+            Bucket[hashCode] = {
+                key: null,
+                value: null
+            };
+        }
+
+        if (Bucket[hashCode].key === key) {
+            Bucket[hashCode].value = value;
+        } else if (Bucket[hashCode].key !== key) {
+            let newLink = LinkedList();
+            newLink.append(value);
+            Bucket[hashCode] = newLink;
+        }
+    }
