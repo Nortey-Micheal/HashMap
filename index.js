@@ -1,7 +1,7 @@
 function HashMap () {
     let Buckets = []
     let BucketSize = 16;
-    Buckets.length = BucketSize
+    Buckets.length = BucketSize;
 
 
 
@@ -10,7 +10,7 @@ function HashMap () {
       
         const primeNumber = 31;
         for (let i = 0; i < key.length; i++) {
-            hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % 16;
+            hashCode = (primeNumber * hashCode + key.charCodeAt(i)) % BucketSize;
         }
         console.log(hashCode)
 
@@ -19,7 +19,11 @@ function HashMap () {
 
     const set = (key,value) => {
         let hashCode = Hash(key);
-
+        // let length = length();
+        if (length() >= (BucketSize * 7.5)) {
+            BucketSize *= 2;
+            
+        }
         if (hashCode < 0 || hashCode >= Buckets.length) {
             throw new Error("Trying to access index out of bound");
         }
@@ -138,9 +142,92 @@ function HashMap () {
     }
 
     const length = () => {
-        Buckets.forEach(item, () => {
-            
-        })
+        let count = 0;
+        for(index in Buckets) {
+            if(Buckets[index]) {
+                if (Buckets[index].nextNode) {
+                    count++;
+                    let temp = Buckets[index].nextNode;
+                    while (temp.nextNode !== null) {
+                        count++;
+                        temp = temp.nextNode;
+                    }
+                    
+                } else {
+                    if (Buckets[index].key === undefined) {
+                        continue;
+                    } else {
+                        count++
+                    }
+                }
+            }
+        }
+        return "<<<<<<< " + count + " >>>>>>";
+    }
+
+    const clear = () => {
+        Buckets = [];
+        Buckets.length = BucketSize
+    }
+
+    const keys = () => {
+        const Keys = [];
+        
+        for(index in Buckets) {
+            if(Buckets[index]) {
+                let newObj = {};
+                if (Buckets[index].nextNode) {
+                    let temp = Buckets[index].nextNode;
+                    let newObj1 = {key: `${temp.key}`};
+                    Keys.push(newObj1)
+                    while (temp.nextNode !== null) {
+                        newObj = {key: `${temp.nextNode.key}`}
+                        Keys.push(newObj) ;
+                        temp = temp.nextNode;
+                    }
+                    
+                } else {
+                    if (Buckets[index].key === undefined) {
+                        continue;
+                    } else {
+                        newObj = {key: `${Buckets[index].key}`};
+                        Keys.push(newObj)
+                    }
+                }
+            }
+        }
+
+        return Keys;
+    }
+
+    const values = () => {
+        const Values = [];
+        
+        for(index in Buckets) {
+            if(Buckets[index]) {
+                let newObj = {};
+                if (Buckets[index].nextNode) {
+                    let temp = Buckets[index].nextNode;
+                    let newObj1 = {Value: `${temp.value}`};
+                    Values.push(newObj1)
+                    while (temp.nextNode !== null) {
+                        newObj = {Value: `${temp.nextNode.value}`}
+                        Values.push(newObj) ;
+                        temp = temp.nextNode;
+                    }
+                    
+                } else {
+                    if (Buckets[index].key === undefined) {
+                        continue;
+                    } else {
+                        newObj = {Value: `${Buckets[index].value}`};
+                        Values.push(newObj)
+                    }
+                }
+            }
+        }
+
+        return Values;
     }
 
     return {
@@ -149,7 +236,12 @@ function HashMap () {
         get,
         has,
         remove,
-        entries
+        length,
+        clear,
+        keys,
+        values,
+        entries,
+        Buckets
     }
 }
 
@@ -191,9 +283,35 @@ test.set('ice cream', 'white')
 test.set('jacket', 'blue')
 test.set('kite', 'pink')
 test.set('lion', 'golden')
+test.set('moon', 'silver')
+test.set('moon', 'silver')
 
+console.log(test.Buckets.length)
 console.log(test.entries())
+console.log(test.length())
+console.log(test.keys())
 console.log(test.get('dog'))
 console.log(test.has('monkey'))
 console.log(test.remove('kite'))
 console.log(test.entries())
+console.log(test.length())
+console.log(test.keys())
+console.log(test.values())
+test.clear()
+console.log(test.entries())
+console.log(test.length())
+console.log(test.keys())
+console.log(test.values())
+
+test.set('apple', 'red')
+test.set('banana', 'yellow')
+test.set('kite', 'pink')
+test.set('lion', 'golden')
+test.set('carrot', 'orange')
+test.set('dog', 'brown')
+
+console.log(test.entries())
+console.log(test.length())
+console.log(test.keys())
+console.log(test.values())
+console.log(test.Buckets.length)
