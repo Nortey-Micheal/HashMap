@@ -48,12 +48,22 @@ function HashMap () {
     const entries = () => {
         const Entries = [];
         
-        for(let index = 0; index <= Buckets.length; index++) {
+        for(index in Buckets) {
             if(Buckets[index]) {
+                let newObj = {};
                 if (Buckets[index].nextNode) {
-                    Entries[index] = Buckets[index].nextNode;
+                    let temp = Buckets[index].nextNode;
+                    let newObj1 = {key: `${temp.key}`,value: `${temp.value}`};
+                    Entries.push(newObj1)
+                    while (temp.nextNode !== null) {
+                        newObj = {key: `${temp.nextNode.key}`,value: `${temp.nextNode.value}`}
+                        Entries.push(newObj) ;
+                        temp = temp.nextNode;
+                    }
+                    
                 } else {
-                    Entries[index] = Buckets[index]
+                    newObj = {key: `${Buckets[index].key}`,value: `${Buckets[index].value}`};
+                    Entries.push(newObj)
                 }
             }
         }
